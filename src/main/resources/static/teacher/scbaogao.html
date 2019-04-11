@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+		<script src="../js/bootstrap.js"></script>
+		<script src="../js/vue/vue.min.js"></script>
+		<style>
+			#app,#app1{
+				width: 600px;
+				text-align: center;
+			}
+			.clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0} 
+            .clearfloat{zoom:1} 
+		</style>
+	</head>
+	<body>
+		<div id="ap">
+		<div id="app" >
+			<h2>请完成以下内容</h2>
+			<p>请选择成绩分布是否符合正态分布</p>
+			<div class="form-inline">
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios"  value="option1" checked>
+						    	不符合正态分布
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios"  value="option2">
+						   	基本符合正态分布
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+				<input type="radio" name="optionsRadios"  value="option2">
+					符合正态分布
+				</label>
+				</div>
+			</div>
+			<div class="clearfloat">
+				<div style="float: left;">
+				<p>请输入试卷存在的问题：</P>
+				<textarea style="width: 290px;height: 300px;" v-model="problem">
+					
+				</textarea>
+			</div>
+			<div style="float: left;margin-left: 20px;">
+				<p>请输入改进措施及教学建议：</p>
+				<textarea  style="width: 290px;height: 300px;" v-model="measure">
+					
+				</textarea>
+			</div>
+			</div>
+			<div style="padding-top: 20px;">
+				<button type="button" class="btn btn-primary" v-on:click="updatemessage">生成报告</button>
+				<button type="button" class="btn btn-success">完成</button>
+				<button type="button" class="btn btn-info">取消</button>
+				<button v-on:click="examples">实例</button>
+			</div>
+		</div>
+		<div id="app1">
+			<h2>试卷分析报告</h2>
+			<textarea style="width: 590px;height: 300px;" v-model="details">
+
+			</textarea>
+		</div>
+	</div>
+	</body>
+<script>
+	var wt="本试卷的题型还不够丰富，有些知识还没有覆盖到，个别题目难度过大，分值偏高。由于部分同学的基本功不够扎实，导致成绩不够理想"
+	var gj="针对在试卷中存在的问题，根据分析指标对部分题目进行调整，使试卷中不出现偏题，怪题，尽量使全卷难度做到中等。"
+	var gj2="进一步改进教学方法，在教学过程中多注意基本方法的训练，要求学多练习，提高解决问题的能力";
+	var vueapp = new Vue({
+		el:"#ap",
+		data:{
+		    problem:"",
+            measure:"",
+			details:""
+		},
+        methods:{
+            examples:function () {
+                $.post("/config.tid.get",{tid:0},function (data) {
+                    vueapp.problem = data.problem;
+                    vueapp.measure = data.measure;
+                });
+            },
+            updatemessage:function () {
+                $.post("/message.analyzes.update",{mid:localStorage.getItem("mid"),problem:vueapp.problem,measure:vueapp.measure},function (data) {
+                    vueapp.details = data;
+                });
+            }
+		}
+	});
+</script>
+</html>

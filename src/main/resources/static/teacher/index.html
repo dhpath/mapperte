@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../js/layui/css/layui.css"/>
+		<script src="../js/layui/layui.js"></script>
+		<script src="../js/vue/vue.min.js"></script>
+		<style>
+			#nav{width: 100%;background-color: rgb(57,61,73);}
+			#nav .nav-center{width: 800px;margin: auto;}
+			.nav-right{width: 200px;float: right;position: relative;top: -60px;}
+			hr{border: 2px solid red;}
+			.iframe-center{width: 1300px;margin: auto;padding-left: 10px;}
+			.iframe-center iframe{width: 100%;min-height: 800px;}
+			.actives{display: none;}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+		<div id="nav">
+			<ul class="layui-nav nav-center" lay-filter="" >
+				<!--v-bind:class="{'layui-nav-item':true,'layui-this':item.classthis}"-->
+			  <li v-bind:class="{'layui-nav-item':true,'layui-this':item.classthis}" v-for="item,index in data"><a href="#" v-on:click="change(index)">{{item.name}}</a></li>
+			</ul>
+			<ul class="layui-nav nav-right" lay-filter="">
+				<li class="layui-nav-item ">
+					 <a href="javascript:;">个人中心</a>
+				    <dl class="layui-nav-child"> <!-- 二级菜单 -->
+				      <dd><a href="#">个人信息</a></dd>
+				      <dd><a href="#">锁屏</a></dd>
+				      <dd><a href="#">退出登录</a></dd>
+				    </dl>
+				</li>
+			</ul>
+		</div>
+		<div class="iframe-center">
+			<iframe v-for="item in data" v-bind:src="item.ifsrc" v-bind:class="{actives:item.classthis}">
+			
+			</iframe>
+		</div>
+		</div>
+	</body>
+	<script>
+		var data=[
+			{classthis:false,name:"输入成绩",ifsrc:""},
+			{classthis:true,name:"保存成绩",ifsrc:""},
+			{classthis:true,name:"输入成绩",ifsrc:""},
+			{classthis:true,name:"分析试卷",ifsrc:""},
+			{classthis:true,name:"生成报告",ifsrc:""},
+			{classthis:true,name:"模拟显示",ifsrc:""},
+			{classthis:true,name:"打印",ifsrc:""},
+			{classthis:true,name:"退出系统",ifsrc:""},
+		]
+		var datas = ["grade.html","","callgrade.html","fenxishijuan.html","scbaogao.html","","",""]
+		var vueapp1=new Vue({
+			el:"#app",
+			data:{
+				data:data,
+				datas:datas,
+				mid:0
+			},
+			methods:{
+				change:function(i){
+					if(this.data[i].ifsrc==""&&this.datas[i]!=""){
+						this.data.forEach(item=>item.classthis=true);
+						this.data[i].classthis=false;
+						this.data[i].ifsrc=this.datas[i];
+					}else if(this.data[i].ifsrc != ""){
+						this.data.forEach(item=>item.classthis=true);
+						this.data[i].classthis=false;
+					}
+                    console.log(i)
+					switch (i) {
+						case 0:
+						    break;
+						case 1:
+						    this.baocun();
+						    console.log("fdf")
+						    break;
+						case 2:
+						    break;
+						case 3:
+						    this.fenxisj();
+						    break;
+						case 4:
+						    break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                        case 7:
+                            break;
+                    }
+				},
+				baocun:function(){
+					var ifram1=$("iframe").get(0).contentWindow.vueapp;
+					var message = new Object();
+					message.teacher = ifram1.teacher;
+					message.subject = ifram1.subject;
+					message.xhours = ifram1.xhours;
+					message.source = ifram1.source;
+					message.classnum = ifram1.classnum;
+					message.realnum = ifram1.realnum;
+					message.lessnum = ifram1.lessnum;
+					message.testmethod = ifram1.testmethod;
+					message.markingmethod = ifram1.markingmethod;
+					message.startyear = ifram1.startyear;
+					message.endyear = ifram1.endyear;
+					message.semester = ifram1.semester;
+					message.bigquestionnum = ifram1.bigquestionnum;
+					message.bigquestionlist = ifram1.bigquestionlist;
+					message.sumfen = ifram1.sumfen;
+                    message.college = ifram1.college;
+                    message.classname = ifram1.classname;
+					var scores = ifram1.scores;
+                    var senddata = {
+                        message:JSON.stringify(message),
+						scores:JSON.stringify(scores)
+					};
+					console.log(senddata)
+					$.post("/message.add",senddata,function(data){
+					    this.mid=data;
+					    localStorage.setItem("mid",JSON.stringify(data));
+					})
+					console.log(message)
+					console.log(scores)
+				},
+                fenxisj:function () {
+
+                }
+			}
+		})
+		layui.use('element', function(){
+		  var element = layui.element;
+		});
+//		function getIfram(index){
+//	        var doc;
+//	
+//	        if (document.all){//IE
+//	                doc = document.frames["MyIFrame"].document;
+//	        }else{//Firefox    
+//	                doc = document.getElementById("MyIFrame").contentDocument;
+//	        }
+//	
+//	        doc.getElementById("s").style.color="blue";
+//		}
+		function getIfram(index){
+			$("iframe").get(i).contentWindow;
+		}
+	</script>
+</html>

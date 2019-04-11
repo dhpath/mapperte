@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css"/>
+		<script src="../js/bootstrap.js"></script>
+		<script src="../js/vue/vue.min.js"></script>
+		<style>
+			*{margin: 0;padding: 0;}
+			.nac-num{
+				width: 100px !important;
+			}
+			.trrigth{
+				padding-right: 20px;
+			}
+			td{
+				padding-top: 10px;
+			}
+			/*.nav-foot {
+				width: 1000px;
+			}*/
+			.clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0} 
+            .clearfloat{zoom:1} 
+			.nav-foot table{
+				float: left;
+				margin-right: 10px;				
+			}
+			.navs-rigth{
+				padding-top: 42px;
+				float: left;
+			}
+			#centers{
+				display: none;
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app" class="form-inline">
+			<table >
+				<tr>
+					<td>授课老师</td>
+					<td class="trrigth">
+		   				<input type="text" class="form-control nac-num" v-model="teacher">
+					</td>
+					<td>考试科目</td>
+					<td colspan="3" class="trrigth">
+		   				<input type="text" class="form-control" style="width: 280px;" v-model="subject">
+					</td>
+					<td>学时数</td>
+					<td class="trrigth">
+		   				<input type="text" class="form-control nac-num" v-model="xhours">
+					</td>
+					<td>试卷来源</td>
+					<td class="trrigth">
+		   				<select class="form-control" v-model="source">
+							<option value="考研室">考研室</option>
+							<option value="教师个人">教师个人</option>
+							<option value="试题库">试题库</option>
+							<option value="试卷库">试卷库</option>
+						</select>
+					</td>
+					<td colspan="4">评卷日期<select class="form-control">
+							<option value="2019">2019-12-11</option>
+							<option value="2018">2019-12-11</option>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td>班级人数</td>
+					<td class="trrigth">
+		   				<input type="text" class="form-control nac-num" v-model="classnum">
+					</td>
+					<td>实考人数</td>
+					<td>
+		   				<input type="text" class="form-control nac-num" v-model="realnum">
+					</td>
+					<td>缺(缓)考人数</td>
+					<td class="trrigth">
+		   				<input type="text" class="form-control nac-num" v-model="lessnum">
+					</td>
+					<td>考试方式</td>
+					<td class="trrigth">
+		   				<select class="form-control" v-model="testmethod">
+							<option value="闭卷">闭卷</option>
+							<option value="开卷">开卷</option>
+						</select>
+					</td>
+					<td>阅卷方式</td>
+					<td class="trrigth">
+		   				<select class="form-control" v-model="markingmethod">
+							<option value="集体">集体</option>
+							<option value="单独">单独</option>
+						</select>
+					</td>
+					
+					<td>
+		   				<input type="text" value="2018" class="form-control" style="width: 70px;" v-model="startyear">
+					</td>
+					<td>
+						至
+					</td>
+					<td>
+		   				<input type="text" class="form-control" style="width: 70px;" value="2019" v-model="endyear">
+					</td>
+					<td>
+						学年度第
+					</td>
+					<td>
+						<select class="form-control" v-model="semester">
+							<option value="一">一</option>
+							<option value="二">二</option>
+						</select>
+					</td>
+					<td>
+						学期
+					</td>
+				</tr>
+				
+			</table>
+			<table>
+				<tr>
+					<td>
+						试卷共有
+					</td>
+					<td class="nac-num">
+						<select class="form-control" v-model="bigquestionnum">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+						</select>
+						大题
+					</td>
+					<td style="width: 180px;">
+						各大题分值和题型如下
+					</td>
+					<td align="right">学院</td>
+					<td>总分值为：</td>
+					<td style="width: 80px;" align="center">{{sumfen}}分</td>
+					<td style="width: 150px;" align="right">
+						<select class="form-control" v-model="college">
+							<option value="理学院">理学院</option>
+							<option value="经管院">经管院</option>
+							<option value="国学院">国学院</option>
+						</select>
+					</td>
+					<td style="width: 40px;" align="right">
+						班级
+					</td>
+					<td>
+						<select class="form-control" v-model="classname">
+							<option value="信级1501">信级1501</option>
+							<option value="信级1502">信级1502</option>
+							<option value="信级1502">信级1502</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<div class="nav-foot clearfloat">
+				<table v-for="item,index in bigquestionlist">
+					<tr>
+						<td></td>
+						<td>第{{index+1}}大题</td>
+					</tr>
+					<tr>
+						<td>分值</td>
+						<td><input type="text" class="form-control" style="width: 50px;" v-model="item.score" ></td>
+					</tr>
+					<tr>
+						<td>题型</td>
+						<td><select class="form-control" v-model="item.questions">
+							<option value="单选选择">单选选择</option>
+							<option value="填空">填空</option>
+							<option value="解答">解答</option>
+							<option value="计算">计算</option>
+							<option value="应用与证明">应用与证明</option>
+						</select></td>
+					</tr>
+				</table>
+				<!--<table>
+					<tr>
+						<td></td>
+						<td>第一大题</td>
+					</tr>
+					<tr>
+						<td>分值</td>
+						<td><input type="text" class="form-control" style="width: 50px;" value="10"></td>
+					</tr>
+					<tr>
+						<td>题型</td>
+						<td><select class="form-control">
+							<option value="单选选择">单选选择</option>
+							<option value="填空">填空</option>
+							<option value="解答">解答</option>
+							<option value="计算">计算</option>
+							<option value="应用与证明">应用与证明</option>
+						</select></td>
+					</tr>
+				</table>-->
+				<div class="navs-rigth">
+					<button type="button" class="btn btn-primary" style="width: 130px;" v-on:click="shuru">输入考试成绩</button><br />
+					<button type="button" class="btn btn-info"  style="width: 130px;margin-top: 5px;">使用技巧</button>
+				</div>
+				<!--<div style="clear: both;">
+					
+				</div>-->
+			</div>
+		
+		<div id="centers">
+			<table >
+				<thead >
+					<tr >
+					<th>
+						序号
+					</th>
+					<th v-for="item,index in bigquestionlist">
+						第{{index+1}}题成绩
+					</th>
+				</tr>
+				</thead>
+				<tbody v-for="item,index in scores">
+					<tr >
+						<td>
+						{{index+1}}	
+						</td>
+						<td v-for="items,indexs in item.scroelist">
+							<input type="text" class="form-control" style="width: 100px;" v-model="items.greade">
+						</td>
+					</tr>
+				</tbody>
+				
+			</table>
+		</div>
+		</div>
+	</body>
+	<script>
+		var date=new Date();
+		var startdate;//开始的年
+		var enddate;//结束年
+		var semester;//学期
+		if(date.getMonth()<=7){
+			startdate=date.getFullYear()-1;
+			enddate=date.getFullYear();
+			semester="二";
+		}else{
+			startdate=date.getFullYear();
+			enddate=date.getFullYear()+1;
+			semester="一"
+		}
+		var vueapp=new Vue({
+			el:"#app",
+			data:{
+				teacher:"邓欢",//老师
+				subject:"概率论",//学科
+				xhours:36,//学时
+				source:"教师个人",//试卷来源
+				classnum:51,//班级人数
+				realnum:51,//参加考试人数
+				lessnum:0,//缺考人数
+				testmethod:"闭卷",//考试方式
+				markingmethod:"单独",//阅卷方式
+				startyear:startdate,//开始年
+				endyear:enddate,//结束年
+				semester:semester,//学期
+				bigquestionnum:0,//大题的数量
+				bigquestionlist:[],//各个大题的内容
+                college:"理学院",
+				classname:"信计1501",
+				sumfen:0,//总分
+				scores:null
+			},
+			methods:{
+				shuru:function(){
+					if(this.sumfen==100){
+						$("#centers").css("display","block");
+						var arr=new Array();
+						for(var i=0;i<this.realnum;i++){
+							var objectservice=new Object();
+							var arrscore=new Array();
+							for (var j=0;j<this.bigquestionnum;j++){
+								var scoreids=new Object();
+								scoreids.greade="";
+								arrscore.push(scoreids);
+							}
+							objectservice.scroelist=arrscore;
+							arr.push(objectservice);
+						}
+						this.scores = arr;
+					}else{
+						alert("分数不是100分")
+					}
+					console.log(this.scores)
+				}
+			}
+			,
+			watch:{
+				bigquestionnum:function(){ //用于选择题目数量进行创建
+					if(this.bigquestionnum==0){
+						this.bigquestionlist=[]
+					}else if(this.bigquestionnum>this.bigquestionlist.length){
+						for(var i=this.bigquestionlist.length;i<this.bigquestionnum;i++){
+							var obj=new Object;
+							obj.score=10;
+							obj.questions="单选选择";
+							this.bigquestionlist.push(obj);
+						}
+					}else if(this.bigquestionnum<this.bigquestionlist.length){
+						for(var i=this.bigquestionnum;i<=this.bigquestionlist.length;i++){
+							this.bigquestionlist.pop()
+						}
+					}
+				},
+			  bigquestionlist: {
+			    handler(newName, oldName) {
+			    	var sum=0;
+			    	for(var i=0;i<this.bigquestionlist.length;i++){
+			    		sum=eval(this.bigquestionlist[i].score+"+"+sum);
+			    	}
+			    	this.sumfen=sum;
+			      console.log(sum);
+			    },
+			    immediate: true,
+			    deep: true
+			  }
+			}
+		});
+	</script>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css"/>
+		<script src="../js/bootstrap.js"></script>
+		<script src="../js/vue/vue.min.js"></script>
+		<style>
+			.clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0} 
+            .clearfloat{zoom:1} 
+		</style>
+	</head>
+	<body>
+	<div id="app">
+		<table  class="table table-hover">
+			<thead>
+				<tr>
+					<th>统计指标</th>
+					<th v-for="item in ilength">第{{item}}大题</th>
+					<th>全卷</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>分数值</td>
+					<td v-for="item,index in indicators">{{item.standardscore}}</td>
+				</tr>
+				<tr>
+					<td>最高分</td>
+					<td v-for="item,index in indicators">{{item.max}}</td>
+				</tr>
+				<tr>
+					<td>最低分</td>
+					<td v-for="item,index in indicators">{{item.min}}</td>
+				</tr>
+				<tr>
+					<td>全距</td>
+					<td v-for="item,index in indicators">{{item.ranges}}</td>
+				</tr>
+				<tr>
+					<td>中位数</td>
+					<td v-for="item,index in indicators">{{item.median}}</td>
+				</tr>
+				<tr>
+					<td>平均分</td>
+					<td v-for="item,index in indicators">{{item.average}}</td>
+				</tr>
+				<tr>
+					<td>标准差</td>
+					<td v-for="item,index in indicators">{{item.std}}</td>
+				</tr>
+				<tr>
+					<td>难度</td>
+					<td v-for="item,index in indicators">{{item.difficulty}}</td>
+				</tr>
+				<tr>
+					<td>区分度</td>
+					<td v-for="item,index in indicators">{{item.discrimination}}</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="clearfloat">
+			<div style="width: 600px;float: left;">
+			<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>分数段</th>
+					<th>0~39.9</th>
+					<th>40~49.9</th>
+					<th>50~59.9</th>
+					<th>60~69.9</th>
+					<th>70~79.9</th>
+					<th>80~89.9</th>
+					<th>90~100</th>
+					<th>及格</th>
+					<th>优秀</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>人数</td>
+					<td>{{scoresections1.score4}}</td>
+					<td>{{scoresections1.score5}}</td>
+					<td>{{scoresections1.score6}}</td>
+					<td>{{scoresections1.score7}}</td>
+					<td>{{scoresections1.score8}}</td>
+					<td>{{scoresections1.score9}}</td>
+					<td>{{scoresections1.score10}}</td>
+					<td>{{scoresections1.pass}}</td>
+					<td>{{scoresections1.excellent}}</td>
+				</tr>
+				<tr>
+					<td>百分比</td>
+					<td>{{scoresections2.score4}}</td>
+					<td>{{scoresections2.score5}}</td>
+					<td>{{scoresections2.score6}}</td>
+					<td>{{scoresections2.score7}}</td>
+					<td>{{scoresections2.score8}}</td>
+					<td>{{scoresections2.score9}}</td>
+					<td>{{scoresections2.score10}}</td>
+					<td>{{scoresections2.pass}}</td>
+					<td>{{scoresections2.excellent}}</td>
+				</tr>
+				<tr>
+					<td colspan="10">
+						试卷总体评价：根据分析指标，整个试卷质量较低，试卷偏难，题目应做必要的调整
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<div style="width: 600px;float: left;margin-left: 20px;">
+			指标说明：
+	    	1、全距：全距是指最高分与最低分之差，在一定程度上反映成绩的集中程度。
+	    	2、难度(P)：难度是指试题或试卷的难易程度。“p”<0.3时为容易，0.3≤“p”≤0.6时为中等难度，0.6<“p”≤0.8时为较难，P>0.8时为很难。
+		    3、区分度(D)：区分度是指试题或试卷对学生实际水平的区分程度或鉴别能力。“D”<0.2时为较差，0.2≤“D”<0.3时为一般，0.3≤“D”<0.4时为较好，D≥0.4时为很好。难度太大和难度太小的题都会降低区分度，只有适宜的难度才会有很好的区分度。
+		    注意：当实考人数较少时，某些指标可能失真，可信度降低。
+		</div>
+		</div>
+		<div id="">
+			图表
+		</div>
+	</div>
+	</body>
+<script>
+	var vuef = new Vue({
+        el:"#app",
+        data:{
+            indicators:[],
+            scoresections1:{},
+            scoresections2:{},
+			ilength:0
+		}
+	})
+console.log("dfdfd");
+	console.log(localStorage.getItem("mid"))
+    $.post("/fenxi.get",{mid:localStorage.getItem("mid")},function(data){
+        console.log(data)
+		var obj = JSON.parse(data);
+        vuef.indicators=obj.indicators;
+        vuef.scoresections1=obj.scoresections[0];
+        vuef.scoresections2=obj.scoresections[1];
+        vuef.ilength=obj.indicators.length-1;
+        console.log(vuef.scoresections1)
+		console.log(vuef.scoresections2)
+    })
+</script>
+</html>
