@@ -3,18 +3,55 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>成绩导入</title>
 		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css"/>
-		<script src="../js/bootstrap.js"></script>
 		<script src="../js/vue/vue.min.js"></script>
 
 	</head>
 
 	<body>
-
+	fdfdff
+	<div id="appCallgrade">
+			<table class="table table-hover">
+				<tr>
+					<th>序号</th>
+					<th>学院</th>
+					<th>班级</th>
+					<th>考试方式</th>
+					<th>科目</th>
+					<th>班级人数</th>
+					<th>参加考试人数</th>
+					<th>缺考人数</th>
+					<th>阅卷方式</th>
+					<th>学期</th>
+					<th>操作</th>
+				</tr>
+				<tr v-for="(item.index) in data">
+					<!--<td>{{index}}</td>
+					<td>{{item.college}}</td>
+					<td>{{item.classname}}</td>
+					<td>{{item.testmethod}}</td>
+					<td>{{item.subject}}</td>
+					<td>{{item.classnum}}</td>
+					<td>{{item.realnum}}</td>
+					<td>{{item.lessnum}}</td>
+					<td>{{item.markingmethod}}</td>
+					<td>{{item.startyear}}到{{item.endyear}}{{item.semester}}学期</td>
+					<td><button type="button" class="btn btn-success">下载</button></td>-->
+				</tr>
+			</table>
+	</div>
 	</body>
 <script>
-
+    var appCallgrade = new Vue({
+        el:"#appCallgrade",
+        data:{
+            data:[]
+        }
+    })
+	$.post("/message.get",{tid:localStorage.getItem("tid")},function (data) {
+        appCallgrade.data = JSON.parse(data);
+		console.log(appCallgrade.data)
+    })
 </script>
 </html>

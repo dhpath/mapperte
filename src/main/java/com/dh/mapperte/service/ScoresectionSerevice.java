@@ -9,6 +9,7 @@ import com.dh.mapperte.repository.ScoresectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,8 +77,8 @@ public class ScoresectionSerevice {
         scoresection1.setScore8(scores[4]*1.0/scorelist.size()+"");
         scoresection1.setScore9(scores[5]*1.0/scorelist.size()+"");
         scoresection1.setScore10(scores[6]*1.0/scorelist.size()+"");
-        scoresection1.setPass(jigesum*1.0/scorelist.size());
-        scoresection1.setExcellent(youxiu*1.0/scorelist.size());
+        scoresection1.setPass(new BigDecimal(jigesum*1.0/scorelist.size()).setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue());
+        scoresection1.setExcellent(new BigDecimal(youxiu*1.0/scorelist.size()).setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue());
         scoresection1.setType(2);
         scoresection1.setMid(mid);
         scoresectionRepository.save(scoresection1);

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>成绩输入</title>
 		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css"/>
 		<script src="../js/bootstrap.js"></script>
@@ -194,11 +194,11 @@
 					</tr>
 					<tr>
 						<td>分值</td>
-						<td><input type="text" class="form-control" style="width: 50px;" value="10"></td>
+						<td><input type="text" class="form-controller" style="width: 50px;" value="10"></td>
 					</tr>
 					<tr>
 						<td>题型</td>
-						<td><select class="form-control">
+						<td><select class="form-controller">
 							<option value="单选选择">单选选择</option>
 							<option value="填空">填空</option>
 							<option value="解答">解答</option>
@@ -234,7 +234,7 @@
 						{{index+1}}	
 						</td>
 						<td v-for="items,indexs in item.scroelist">
-							<input type="text" class="form-control" style="width: 100px;" v-model="items.greade">
+							<input type="text" class="form-control" style="width: 100px;" v-model="items.greade" @keyup.Enter="keydowms(index)">
 						</td>
 					</tr>
 				</tbody>
@@ -300,7 +300,10 @@
 						alert("分数不是100分")
 					}
 					console.log(this.scores)
-				}
+				},
+                keydowms:function (event) {
+					console.log(event.parentElement)
+                }
 			}
 			,
 			watch:{

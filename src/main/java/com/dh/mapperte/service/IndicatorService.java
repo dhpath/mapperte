@@ -80,6 +80,7 @@ public class IndicatorService {
         for (int i = 0; i < difficultylist.size(); i++) {
             if (difficulty<difficultylist.get(i)){
                 diff ="" + difficulty + difficultval.get(i);
+                break;
             }
         }
         indicator.setDifficulty(diff);
@@ -93,10 +94,14 @@ public class IndicatorService {
         for (int i = 0; i < discriminationlist.size(); i++) {
             if (discrimination<discriminationlist.get(i)){
                 discrimina ="" + discrimination + discriminationval.get(i);
+                break;
             }
         }
         indicator.setDiscrimination(discrimina);
         indicatorRepositroy.save(indicator);
     }
 
+    public static void main(String[] args) {
+        System.out.println(0.5<3.0);
+    }
 }

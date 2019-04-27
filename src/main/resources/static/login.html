@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>登录</title>
+<title>登录界面</title>
 <link rel="stylesheet" href="css/normalize.css">
 
 <link rel="stylesheet" href="css/login.css">
@@ -107,7 +107,7 @@
 			//调用后台登录验证的方法
 			var use=$("#login-username").val();
 			var usp=$("#login-password").val();
-            $.post("login.do",{username:use,password:usp}, function (data) {
+            $.post("login.do",{username:use,pwd:usp}, function (data) {
 
                if(data==null||data=="")
 			   {
@@ -115,8 +115,10 @@
 			   }
 			   else{
 			       console.log(data);
-                   localStorage.setItem("sid",data.uid);
-                   window.location.href="index.html";
+                   localStorage.setItem("teacher",JSON.stringify(data));
+                   localStorage.setItem("tid",JSON.stringify(data.id));
+                   alert(localStorage.getItem("tid"))
+                   window.location.href="teacher/index.html";
 			   }
             });
 
@@ -336,10 +338,13 @@ body{
 }
 
 .snow-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100001; }
-
+#title{text-align: center;font-family: "微软雅黑";font-size: 60px; letter-spacing:28px;color: ivory;font-style:oblique;}
 </style>
 </head>
 <body>
+	<div id="title">
+		<span >试卷分析系统</span>
+	</div>
 	<!-- 雪花背景 -->
 	<div class="snow-container"></div>
 	<!-- 登录控件 -->

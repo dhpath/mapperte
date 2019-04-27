@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>试卷分析系统</title>
 		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../js/layui/css/layui.css"/>
 		<script src="../js/layui/layui.js"></script>
@@ -28,7 +28,7 @@
 				<li class="layui-nav-item ">
 					 <a href="javascript:;">个人中心</a>
 				    <dl class="layui-nav-child"> <!-- 二级菜单 -->
-				      <dd><a href="#">个人信息</a></dd>
+				      <dd><a href="personage.html" target="view_window">个人信息</a></dd>
 				      <dd><a href="#">锁屏</a></dd>
 				      <dd><a href="#">退出登录</a></dd>
 				    </dl>
@@ -46,7 +46,7 @@
 		var data=[
 			{classthis:false,name:"输入成绩",ifsrc:""},
 			{classthis:true,name:"保存成绩",ifsrc:""},
-			{classthis:true,name:"输入成绩",ifsrc:""},
+			{classthis:true,name:"导入成绩",ifsrc:""},
 			{classthis:true,name:"查看分析",ifsrc:""},
 			{classthis:true,name:"生成报告",ifsrc:""},
 			{classthis:true,name:"导出",ifsrc:""},
@@ -76,14 +76,17 @@
 						    break;
 						case 1:
 						    this.baocun();
-						    console.log("fdf")
 						    break;
 						case 2:
 						    break;
 						case 3:
+                            if(this.data[3].ifsrc != ""){
+                                $("iframe").get(3).contentWindow.location.reload()
+                            }
 						    this.fenxisj();
 						    break;
 						case 4:
+
 						    break;
                         case 5:
                             break;
@@ -113,6 +116,7 @@
 					message.sumfen = ifram1.sumfen;
                     message.college = ifram1.college;
                     message.classname = ifram1.classname;
+                    message.tid= localStorage.getItem("tid");
 					var scores = ifram1.scores;
                     var senddata = {
                         message:JSON.stringify(message),
@@ -123,8 +127,6 @@
 					    this.mid=data;
 					    localStorage.setItem("mid",JSON.stringify(data));
 					})
-					console.log(message)
-					console.log(scores)
 				},
                 fenxisj:function () {
 

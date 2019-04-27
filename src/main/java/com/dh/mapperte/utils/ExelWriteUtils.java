@@ -56,7 +56,7 @@ public class ExelWriteUtils {
     }
     @Test
     public void writeXls() {
-        String path = "../crm-onlinepay-web/PoiStatus.xls";
+        String path = "../crm-onlinepay-controller/PoiStatus.xls";
         writeExcel("E:\\e.xls");
     }
 }

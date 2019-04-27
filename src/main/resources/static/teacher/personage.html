@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>个人信息修改页面</title>
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+		<script src="../js/bootstrap.js"></script>
+		<script src="../js/vue/vue.min.js"></script>
+		<style>
+			#app,#app1{
+				width: 600px;
+				text-align: center;
+			}
+			.clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0} 
+            .clearfloat{zoom:1} 
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<table>
+			<tr>
+				<td>在用密码</td>
+				<td><input type="text"   v-model="usepwd"> </td>
+			</tr>
+			<tr>
+				<td>新密码</td>
+				<td><input type="text" v-model="newpwd"></td>
+			</tr>
+			<tr>
+				<td>确定新密码</td>
+				<td><input type="text" v-model="newspwd"></td>
+			</tr>
+			<tr>
+				<td>
+					<button type="button" class="btn btn-primary" style="width: 130px;" v-on:click="mima">确定修改</button>
+				</td>
+			</tr>
+		</table>
+			<div style="float: left;">
+				<p>请输入试卷存在的问题模板：</P>
+				<textarea style="width: 290px;height: 300px;" v-model="problem">
+					
+				</textarea>
+			</div>
+			<div style="float: left;margin-left: 20px;">
+				<p>请输入改进措施及教学建议模板：</p>
+				<textarea  style="width: 290px;height: 300px;" v-model="suggest">
+					
+				</textarea>
+			</div>
+			<button type="button" class="btn btn-primary" style="width: 130px;" v-on:click="moban">确定修改</button>
+		</div>
+		
+	</body>
+	<script>
+		var vueapp=new Vue({
+			el:"#app",
+			data:{
+				usepwd:"",
+				newpwd:"",
+				newspwd:"",
+				problem:"",
+				suggest:""
+			},
+			methods:{
+				mima:function(){
+					if(this.newpwd!=this.newspwd){
+						alert("两次密码不一致")
+					}
+					$.post("/pwd.do",{usepwd:vueapp.usepwd,newpwd:vueapp.newpwd,newspwd:vueapp.newspwd,tid:localStorage.getItem("tid")},function(data){
+						alert(data)
+					})
+				},
+				moban:function(){
+					$.post("/config.add",{problem:vueapp.problem,suggest:vueapp.suggest,tid:localStorage.getItem("tid")},function(data){
+						alert(data)
+					})
+				}
+			}
+		})
+        $.post("/config.tid.get",{tid:localStorage.getItem("tid")},function (data) {
+            vueapp.problem = data.problem;
+            vueapp.suggest = data.measure;
+        });
+	</script>
+</html>

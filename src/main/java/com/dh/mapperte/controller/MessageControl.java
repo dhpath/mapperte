@@ -1,9 +1,10 @@
-package com.dh.mapperte.web;
+package com.dh.mapperte.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.dh.mapperte.enpity.Indicator;
 import com.dh.mapperte.enpity.Scoresection;
 import com.dh.mapperte.repository.IndicatorRepositroy;
+import com.dh.mapperte.repository.MessageRepository;
 import com.dh.mapperte.repository.ScoresectionRepository;
 import com.dh.mapperte.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class MessageControl {
     private IndicatorRepositroy indicatorRepositroy;
     @Autowired
     private ScoresectionRepository scoresectionRepository;
+    @Autowired
+    private MessageRepository messageRepository;
     @RequestMapping("message.add")
     public int addMessage(String message,String scores){
         return messageService.addMessage(message,scores);
@@ -39,5 +42,9 @@ public class MessageControl {
     @RequestMapping("message.analyzes.update")
     public String updateMmessageAnalyzes(String mid,String problem,String measure){
         return messageService.updateMmessageAnalyzes(Integer.parseInt(mid),problem,measure);
+    }
+    @RequestMapping("message.get")
+    public String getMessage(int tid){
+        return JSON.toJSONString(messageRepository.findAllByTid(tid));
     }
 }

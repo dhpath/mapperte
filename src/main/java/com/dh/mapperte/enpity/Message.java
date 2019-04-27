@@ -18,7 +18,7 @@ public class Message {
     private String startyear;
     private String endyear;
     private String semester;
-    private Integer tno;
+    private Integer tid;
     private Integer state;
     private Double sumfen;
     private String analyzes;
@@ -157,13 +157,13 @@ public class Message {
     }
 
     @Basic
-    @Column(name = "tno")
-    public Integer getTno() {
-        return tno;
+    @Column(name = "tid")
+    public Integer getTid() {
+        return tid;
     }
 
-    public void setTno(Integer tno) {
-        this.tno = tno;
+    public void setTid(Integer tno) {
+        this.tid = tno;
     }
 
     @Basic
@@ -214,7 +214,7 @@ public class Message {
                 Objects.equals(startyear, message.startyear) &&
                 Objects.equals(endyear, message.endyear) &&
                 Objects.equals(semester, message.semester) &&
-                Objects.equals(tno, message.tno) &&
+                Objects.equals(tid, message.tid) &&
                 Objects.equals(state, message.state) &&
                 Objects.equals(sumfen, message.sumfen) &&
                 Objects.equals(analyzes, message.analyzes);
@@ -222,7 +222,7 @@ public class Message {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, teacher, subject, xhours, source, classnum, realnum, lessnum, testmethod, markingmethod, startyear, endyear, semester, tno, state, sumfen, analyzes);
+        return Objects.hash(id, teacher, subject, xhours, source, classnum, realnum, lessnum, testmethod, markingmethod, startyear, endyear, semester, tid, state, sumfen, analyzes);
     }
 
     @Basic

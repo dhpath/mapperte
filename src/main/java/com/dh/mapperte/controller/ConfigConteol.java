@@ -1,7 +1,5 @@
-package com.dh.mapperte.web;
+package com.dh.mapperte.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.dh.mapperte.enpity.Config;
 import com.dh.mapperte.repository.ConfigRepositroy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +23,18 @@ public class ConfigConteol {
         return allByMid.get(0);
     }
     @RequestMapping("config.add")
-    public boolean addConfig(int tid,String configs){
+    public boolean addConfig(int tid,String problem,String suggest){
         List<Config> allByMid1 = configRepositroy.findAllByTid(tid);
         if(allByMid1.size()==0){
             Config config = new Config();
-            JSONObject jsonObject = JSON.parseObject(configs);
-            config.setMeasure(jsonObject.get("measure").toString());
-            config.setProblem(jsonObject.get("problem").toString());
+            config.setMeasure(suggest);
+            config.setProblem(problem);
+            config.setTid(tid);
             configRepositroy.save(config);
         }else{
             Config config = allByMid1.get(0);
-            JSONObject jsonObject = JSON.parseObject(configs);
-            config.setMeasure(jsonObject.get("measure").toString());
-            config.setProblem(jsonObject.get("problem").toString());
+            config.setMeasure(suggest);
+            config.setProblem(problem);
             configRepositroy.save(config);
         }
         return true;
