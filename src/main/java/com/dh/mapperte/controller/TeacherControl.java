@@ -41,6 +41,6 @@ public class TeacherControl {
         }
         teacher.setPwd(newpwd);
         teacherRepository.save(teacher);
-        return "修改成功";
+        return "修改成功" ;
     }
 }
